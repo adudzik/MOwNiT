@@ -1,11 +1,11 @@
 from numpy import linspace, array
 from matplotlib import pyplot as plt
-from utils import get_chebyshev_zeros, get_equal_distance_nodes, \
+from utilities import get_chebyshev_zeros, get_equal_distance_nodes, \
     calculate_precision
 from newton import get_newton_coefficients, get_newton_values
 from lagrange import lagrange_interpolation
-from hermite import hermite_interpolation, get_hermite_coefficients, get_hermite_values
-from math import sin, pi, e
+from hermite import get_hermite_coefficients, get_hermite_values
+from numpy import sin, pi, e
 
 START = -10.0
 END = 5.0
@@ -25,9 +25,11 @@ def test(n, int_type, x_exp, y_exp, get_nodes, nodes_type):
     if nodes_type == 0:
         file_name_part_1 = "equal_"
         file_name_part_2 = "_equal"
+        p_label = "węzły równoodległe"
     else:
         file_name_part_1 = "chebyshev_"
         file_name_part_2 = "_chebyshev"
+        p_label = "węzły Czebyszewa"
 
     if int_type == 0:
         for i in range(len(x_exp)):
@@ -52,31 +54,40 @@ def test(n, int_type, x_exp, y_exp, get_nodes, nodes_type):
         prec_path = PATHS[2] + file_name_part_2 + ".txt"
 
     else:
-        f_int = hermite_interpolation(x_node, y_node, f)
+        h_node = []
+        for x in x_node:
+            h_node.append(x)
+            h_node.append(x)
+            h_node.append(x)
+
+        hy_node = [f(x) for x in h_node]
+
+        a = get_hermite_coefficients(h_node, hy_node, f)
 
         title = "Interpolacja Hermite'a dla liczby wezłów: " + str(n)
 
         for i in range(len(x_exp)):
-            y_int.append(f_int(x_exp[i]))
+            y_int.append(get_hermite_values(a, h_node, x_exp[i]))
 
         plot_path = PATHS[0] + file_name_part_1 + str(n) + ".png"
         prec_path = PATHS[0] + file_name_part_2 + ".txt"
 
     plt.plot(x_exp, y_exp, c='#00035b', label='funkcja f')
     plt.plot(x_exp, y_int, c='#fd3c06', label='funkcja interpolująca')
-    plt.scatter(x_node, y_node, marker='o', c='red', s=20,
-                label='węzły interpolacji')
+    plt.scatter(x_node, y_node, marker='o', c='green', s=25,
+                label=p_label)
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
     plt.title(title)
     plt.legend(loc="upper center")
-
     plt.savefig(plot_path, bbox_inches='tight')
     plt.close()
 
-    calculate_precision(y_exp, y_int, prec_path, n)
+    calculate_precision(y_exp, y_int, prec_path)
 
 
 def main():
-    x_exp = linspace(START, END, 100)
+    x_exp = linspace(START, END, 150)
     y_exp = [f(x) for x in x_exp]
 
     for i in range(14):
