@@ -63,10 +63,10 @@ def approximate(deg, x_exp, y_exp):
 
 
 def test(deg, norm_file):
-    x_app = np.linspace(START, END, 100)
+    x_app = np.linspace(START, END, 150)
 
     if deg < 10:
-        for i in range(deg+1, 10, 1):
+        for i in range(deg + 1, 10, 1):
             x_nodes = np.linspace(START, END, i)
             y_nodes = [f(x) for x in x_nodes]
 
@@ -74,18 +74,25 @@ def test(deg, norm_file):
 
             y_app = [fun(x) for x in x_app]
             y_f = [f(x) for x in x_app]
-            plt.plot(x_app, y_f, c='red', label='funkcja')
-            plt.plot(x_app, y_app, c='blue', label='aproksymacja')
-            plt.scatter(x_nodes, y_nodes, c='green', s=25, label='punkty')
+
+            plt.plot(x_app, y_f, c='red', label='funkcja aproksymowana')
+            plt.plot(x_app, y_app, c='blue', label='funkcja aproksymująca')
+
+            if i < 30:
+                plt.scatter(x_nodes, y_nodes, c='green', s=25,
+                            label='punkty aproksymacji')
+
             plt.title(
-                "Aproksymacja dla " + str(i) + " punktów i stopnia " + str(
-                    deg))
+                "Aproksymacja dla " + str(i) + " punktów i wielomianu stopnia "
+                + str(deg))
             plt.legend(loc="upper center")
+            plt.xlabel("x")
+            plt.ylabel("f(x)")
             plt.savefig("plots\\eq_" + str(deg) + "_" + str(i) + ".png",
                         bbox_inches='tight')
             plt.close()
 
-            calculate_precision(y_app, y_f, i, norm_file)
+            # calculate_precision(y_app, y_f, i, norm_file)
 
         for i in range(10, 101, 10):
             x_nodes = np.linspace(START, END, i)
@@ -95,18 +102,24 @@ def test(deg, norm_file):
             y_app = [fun(x) for x in x_app]
             y_f = [f(x) for x in x_app]
 
-            plt.plot(x_app, y_f, c='red', label='funkcja')
-            plt.plot(x_app, y_app, c='blue', label='aproksymacja')
-            plt.scatter(x_nodes, y_nodes, c='green', s=25, label='punkty')
+            plt.plot(x_app, y_f, c='red', label='funkcja aproksymowana')
+            plt.plot(x_app, y_app, c='blue', label='funkcja aproksymująca')
+
+            if i < 30:
+                plt.scatter(x_nodes, y_nodes, c='green', s=25,
+                            label='punkty aproksymacji')
+
             plt.title(
-                "Aproksymacja dla " + str(i) + " punktów i stopnia " + str(
-                    deg))
+                "Aproksymacja dla " + str(i) + " punktów i wielomianu stopnia "
+                + str(deg))
             plt.legend(loc="upper center")
+            plt.xlabel("x")
+            plt.ylabel("f(x)")
             plt.savefig("plots\\eq_" + str(deg) + "_" + str(i) + ".png",
                         bbox_inches='tight')
             plt.close()
 
-            calculate_precision(y_app, y_f, i, norm_file)
+            # calculate_precision(y_app, y_f, i, norm_file)
     else:
         for i in range(deg, 101, 10):
             x_nodes = np.linspace(START, END, i)
@@ -116,44 +129,27 @@ def test(deg, norm_file):
             y_app = [fun(x) for x in x_app]
             y_f = [f(x) for x in x_app]
 
-            plt.plot(x_app, y_f, c='red', label='funkcja')
-            plt.plot(x_app, y_app, c='blue', label='aproksymacja')
-            plt.scatter(x_nodes, y_nodes, c='green', s=25, label='punkty')
+            plt.plot(x_app, y_f, c='red', label='funkcja aproksymowana')
+            plt.plot(x_app, y_app, c='blue', label='funkcja aproksymująca')
+
+            if i < 30:
+                plt.scatter(x_nodes, y_nodes, c='green', s=25,
+                            label='punkty aproksymacji')
+
             plt.title(
-                "Aproksymacja dla " + str(i) + " punktów i stopnia " + str(
-                    deg))
+                "Aproksymacja dla " + str(i) + " punktów i wielomianu stopnia "
+                + str(deg))
             plt.legend(loc="upper center")
+            plt.xlabel("x")
+            plt.ylabel("f(x)")
             plt.savefig("plots\\eq_" + str(deg) + "_" + str(i) + ".png",
                         bbox_inches='tight')
             plt.close()
 
-            calculate_precision(y_app, y_f, i, norm_file)
+            # calculate_precision(y_app, y_f, i, norm_file)
 
 
 def main():
-    x_app = np.linspace(START, END, 100)
-
-    i = 500
-    deg = 100
-
-    x_nodes = np.linspace(START, END, i)
-    y_nodes = [f(x) for x in x_nodes]
-    fun = approximate(deg, x_nodes, y_nodes)
-
-    y_app = [fun(x) for x in x_app]
-    y_f = [f(x) for x in x_app]
-
-    plt.plot(x_app, y_f, c='red', label='funkcja')
-    plt.plot(x_app, y_app, c='blue', label='aproksymacja')
-    plt.scatter(x_nodes, y_nodes, c='green', s=25, label='punkty')
-    plt.title(
-        "Aproksymacja dla " + str(i) + " punktów i stopnia " + str(
-            deg))
-    plt.legend(loc="upper center")
-    plt.show()
-    plt.close()
-
-    return
     for deg in range(2, 10, 1):
         test(deg, "results\\res_" + str(deg) + ".txt")
         print("DONE for deg:", deg)
