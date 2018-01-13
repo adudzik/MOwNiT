@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from math import sqrt
 
 m = 2
 k = 4
@@ -41,7 +40,7 @@ def runge_kutta(x0, y0, x1, n):
     return vx, vy
 
 
-def calculate_precision(x1, x2, points, filename):
+def calculate_precision(x1, x2, step, points, filename):
     err_max = []
     err_sqr = []
 
@@ -55,16 +54,19 @@ def calculate_precision(x1, x2, points, filename):
 
     with open(filename, "a") as file:
         file.write(str(points) + " ")
+        file.write(str(step) + " ")
         file.write(str(n1) + " ")
         file.write(str(n2) + "\n")
 
 
 def main():
-    for i in range(100, 25000, 1000):
+    for j in range(100, 101, 100):
         x0 = - np.pi / 4
         xn = 3 * np.pi / 2
         y0 = 2
-        delta = (xn - x0) / i
+        delta = 0.00001
+        i = int((xn - x0) / delta)
+        print(i)
         to_str = "{:.9f}".format(delta)
         title = "Rozwiązanie równania różniczkowego 1. rzędu dla kroku " \
                 + to_str
@@ -73,11 +75,11 @@ def main():
         y = [theory(x) for x in x]
 
         x_e, y_e = euler(x, y0, i, delta)
-        x_rk, y_rk = runge_kutta(x0, y0, xn, i)
+        # x_rk, y_rk = runge_kutta(x0, y0, xn, i)
 
         plt.plot(x, y, label="wartość dokładna")
         plt.plot(x_e, y_e, label="metoda Euler'a")
-        plt.plot(x_rk, y_rk, label="metoda Runge-Kutta")
+        # plt.plot(x_rk, y_rk, label="metoda Runge-Kutta")
         plt.legend()
         plt.xlabel("x")
         plt.ylabel("y(x)")
@@ -85,8 +87,8 @@ def main():
         plt.savefig("plots\\plot_" + str(i) + ".png")
         plt.close()
 
-        calculate_precision(y_rk, y, delta, "results\\runge_kutta.txt")
-        calculate_precision(y_e, y, delta, "results\\euler.txt")
+        # calculate_precision(y_rk, y, delta, i, "results\\runge_kutta.txt")
+        calculate_precision(y_e, y, delta, i, "results\\euler.txt")
 
         print("DONE for ", i, "points")
 
